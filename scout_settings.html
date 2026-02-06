@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Scout Settings">
+    <meta name="theme-color" content="#2d5016">
+    <title>Scout Tracker - Settings</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c26 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .nav-button {
+            background: white;
+            color: #2d5016;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .nav-button:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4a7c26;
+        }
+        
+        .card-title {
+            font-size: 1.8em;
+            color: #2d5016;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4a7c26;
+        }
+        
+        .button {
+            background: #4a7c26;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            min-height: 44px;
+        }
+        
+        .button:hover {
+            background: #3a6620;
+        }
+        
+        .button-danger {
+            background: #dc3545;
+        }
+        
+        .button-danger:hover {
+            background: #c82333;
+        }
+        
+        .list-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .list-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .list-item-name {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #2d5016;
+        }
+        
+        .list-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .small-button {
+            padding: 6px 12px;
+            font-size: 0.9em;
+        }
+        
+        .patrol-scouts {
+            margin-top: 10px;
+            padding-left: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚙️ Scout Tracker Settings</h1>
+            <p class="subtitle">Manage Scouts and Patrols</p>
+        </header>
+        
+        <div class="nav-buttons">
+            <a href="javascript:history.back()" class="nav-button">← Back</a>
+            <a href="./scout_expenses.html" class="nav-button">📊 Main App</a>
+        </div>
+        
+        <div id="successMessage" class="success-message"></div>
+        
+        <div class="grid-2">
+            <!-- Patrol Management -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Patrols</h2>
+                </div>
+                
+                <form id="patrolForm">
+                    <div class="form-group">
+                        <label for="patrolName">Patrol Name *</label>
+                        <input type="text" id="patrolName" placeholder="e.g., Eagle Patrol" required>
+                    </div>
+                    <button type="submit" class="button">Add Patrol</button>
+                </form>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="margin-bottom: 15px;">Current Patrols</h3>
+                    <div id="patrolList">
+                        <div class="empty-state">No patrols yet</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scout Management -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Scouts</h2>
+                </div>
+                
+                <form id="scoutForm">
+                    <div class="form-group">
+                        <label for="scoutName">Scout Name *</label>
+                        <input type="text" id="scoutName" placeholder="e.g., John Smith" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="scoutPatrol">Assign to Patrol</label>
+                        <select id="scoutPatrol">
+                            <option value="">Unassigned</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="button">Add Scout</button>
+                </form>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="margin-bottom: 15px;">Current Scouts</h3>
+                    <div id="scoutList">
+                        <div class="empty-state">No scouts yet</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Patrol Details Section -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Patrol Roster</h2>
+            </div>
+            <div id="patrolRoster">
+                <div class="empty-state">Add patrols and scouts to see roster</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let patrols = [];
+        let scouts = [];
+        
+        // Load data from localStorage
+        function loadData() {
+            const savedPatrols = localStorage.getItem('scoutPatrols');
+            const savedScouts = localStorage.getItem('scoutScouts');
+            
+            if (savedPatrols) {
+                patrols = JSON.parse(savedPatrols);
+            }
+            
+            if (savedScouts) {
+                scouts = JSON.parse(savedScouts);
+            }
+        }
+        
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('scoutPatrols', JSON.stringify(patrols));
+            localStorage.setItem('scoutScouts', JSON.stringify(scouts));
+        }
+        
+        // Show success message
+        function showSuccess(message) {
+            const msgEl = document.getElementById('successMessage');
+            msgEl.textContent = message;
+            msgEl.style.display = 'block';
+            setTimeout(() => {
+                msgEl.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Add patrol
+        document.getElementById('patrolForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('patrolName').value.trim();
+            if (!name) return;
+            
+            patrols.push({
+                id: Date.now().toString(),
+                name: name
+            });
+            
+            saveData();
+            renderPatrols();
+            renderScoutForm();
+            renderPatrolRoster();
+            showSuccess(`Patrol "${name}" added successfully!`);
+            
+            e.target.reset();
+        });
+        
+        // Add scout
+        document.getElementById('scoutForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('scoutName').value.trim();
+            const patrolId = document.getElementById('scoutPatrol').value;
+            
+            if (!name) return;
+            
+            scouts.push({
+                id: Date.now().toString(),
+                name: name,
+                patrolId: patrolId || null
+            });
+            
+            // Initialize credit for this scout in the main app
+            let scoutCredits = {};
+            const savedCredits = localStorage.getItem('scoutCredits');
+            if (savedCredits) {
+                scoutCredits = JSON.parse(savedCredits);
+            }
+            scoutCredits[Date.now().toString()] = 0;
+            localStorage.setItem('scoutCredits', JSON.stringify(scoutCredits));
+            
+            saveData();
+            renderScouts();
+            renderPatrolRoster();
+            showSuccess(`Scout "${name}" added successfully!`);
+            
+            e.target.reset();
+        });
+        
+        // Delete patrol
+        function deletePatrol(id) {
+            if (!confirm('Delete this patrol? Scouts will become unassigned.')) return;
+            
+            patrols = patrols.filter(p => p.id !== id);
+            
+            // Unassign scouts from this patrol
+            scouts.forEach(scout => {
+                if (scout.patrolId === id) {
+                    scout.patrolId = null;
+                }
+            });
+            
+            saveData();
+            renderPatrols();
+            renderScouts();
+            renderPatrolRoster();
+            showSuccess('Patrol deleted successfully!');
+        }
+        
+        // Delete scout
+        function deleteScout(id) {
+            if (!confirm('Delete this scout? This cannot be undone.')) return;
+            
+            scouts = scouts.filter(s => s.id !== id);
+            saveData();
+            renderScouts();
+            renderPatrolRoster();
+            showSuccess('Scout deleted successfully!');
+        }
+        
+        // Move scout to different patrol
+        function moveScout(scoutId, newPatrolId) {
+            const scout = scouts.find(s => s.id === scoutId);
+            if (scout) {
+                scout.patrolId = newPatrolId || null;
+                saveData();
+                renderScouts();
+                renderPatrolRoster();
+            }
+        }
+        
+        // Render patrols
+        function renderPatrols() {
+            const list = document.getElementById('patrolList');
+            
+            if (patrols.length === 0) {
+                list.innerHTML = '<div class="empty-state">No patrols yet</div>';
+                return;
+            }
+            
+            list.innerHTML = patrols.map(patrol => {
+                const scoutCount = scouts.filter(s => s.patrolId === patrol.id).length;
+                return `
+                    <div class="list-item">
+                        <div class="list-item-header">
+                            <div class="list-item-name">${patrol.name}</div>
+                            <div class="list-item-actions">
+                                <button class="button button-danger small-button" onclick="deletePatrol('${patrol.id}')">Delete</button>
+                            </div>
+                        </div>
+                        <div style="color: #666; font-size: 0.9em;">
+                            ${scoutCount} scout${scoutCount !== 1 ? 's' : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Render scouts
+        function renderScouts() {
+            const list = document.getElementById('scoutList');
+            
+            if (scouts.length === 0) {
+                list.innerHTML = '<div class="empty-state">No scouts yet</div>';
+                return;
+            }
+            
+            list.innerHTML = scouts.map(scout => {
+                const patrol = scout.patrolId ? patrols.find(p => p.id === scout.patrolId) : null;
+                
+                return `
+                    <div class="list-item">
+                        <div class="list-item-header">
+                            <div class="list-item-name">${scout.name}</div>
+                            <div class="list-item-actions">
+                                <button class="button button-danger small-button" onclick="deleteScout('${scout.id}')">Delete</button>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                            <label style="margin: 0; font-size: 0.9em;">Patrol:</label>
+                            <select onchange="moveScout('${scout.id}', this.value)" style="padding: 6px; font-size: 0.9em; width: auto;">
+                                <option value="" ${!scout.patrolId ? 'selected' : ''}>Unassigned</option>
+                                ${patrols.map(p => `
+                                    <option value="${p.id}" ${scout.patrolId === p.id ? 'selected' : ''}>${p.name}</option>
+                                `).join('')}
+                            </select>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Render scout form patrol dropdown
+        function renderScoutForm() {
+            const select = document.getElementById('scoutPatrol');
+            select.innerHTML = '<option value="">Unassigned</option>' +
+                patrols.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+        }
+        
+        // Render patrol roster
+        function renderPatrolRoster() {
+            const roster = document.getElementById('patrolRoster');
+            
+            if (patrols.length === 0 && scouts.length === 0) {
+                roster.innerHTML = '<div class="empty-state">Add patrols and scouts to see roster</div>';
+                return;
+            }
+            
+            let html = '';
+            
+            // Group by patrol
+            patrols.forEach(patrol => {
+                const patrolScouts = scouts.filter(s => s.patrolId === patrol.id);
+                html += `
+                    <div class="list-item" style="margin-bottom: 20px;">
+                        <div class="list-item-name" style="margin-bottom: 10px; font-size: 1.3em;">
+                            ${patrol.name} (${patrolScouts.length} scouts)
+                        </div>
+                        ${patrolScouts.length > 0 ? `
+                            <div class="patrol-scouts">
+                                ${patrolScouts.map(s => `• ${s.name}`).join('<br>')}
+                            </div>
+                        ` : '<div class="patrol-scouts" style="color: #999;">No scouts assigned</div>'}
+                    </div>
+                `;
+            });
+            
+            // Unassigned scouts
+            const unassigned = scouts.filter(s => !s.patrolId);
+            if (unassigned.length > 0) {
+                html += `
+                    <div class="list-item">
+                        <div class="list-item-name" style="margin-bottom: 10px; font-size: 1.3em; color: #666;">
+                            Unassigned Scouts (${unassigned.length})
+                        </div>
+                        <div class="patrol-scouts">
+                            ${unassigned.map(s => `• ${s.name}`).join('<br>')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            roster.innerHTML = html;
+        }
+        
+        // Initialize
+        loadData();
+        renderPatrols();
+        renderScouts();
+        renderScoutForm();
+        renderPatrolRoster();
+    </script>
+</body>
+</html>
